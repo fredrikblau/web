@@ -127,7 +127,12 @@ import { useGettext } from 'vue3-gettext'
 import { isSpaceResource } from '@opencloud-eu/web-client'
 import { useIsVisible } from '@opencloud-eu/design-system/composables'
 import { OcCard } from '@opencloud-eu/design-system/components'
-import { useFolderLink, useResourceLink, useResourcesStore } from '../../composables'
+import {
+  useFilesViewScrollContainer,
+  useFolderLink,
+  useResourceLink,
+  useResourcesStore
+} from '../../composables'
 
 const {
   resource,
@@ -178,6 +183,7 @@ const isResourceSelected = computed(() => resourcesStore.selectedIdsSet.has(reso
 
 const observerTarget = useTemplateRef<InstanceType<typeof OcCard>>('observerTarget')
 const observerTargetElement = computed<HTMLElement>(() => unref(observerTarget)?.$el)
+const scrollContainer = useFilesViewScrollContainer()
 
 const showStatusIcon = computed(() => {
   return resource.locked || resource.processing
@@ -220,6 +226,7 @@ const resourceDescription = computed(() => {
 const { isVisible } = lazy
   ? useIsVisible({
       target: observerTargetElement,
+      root: scrollContainer,
       onVisibleCallback: () => emit('itemVisible'),
       onHiddenCallback: () => emit('itemHidden')
     })
